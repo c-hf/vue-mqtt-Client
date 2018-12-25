@@ -1,0 +1,43 @@
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+		'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	min-width: 1024px;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+img {
+	width: 100%;
+	height: 100%;
+	outline: none !important;
+}
+
+i {
+	font-style: normal;
+}
+
+// 搜狗浏览器适配
+input::-webkit-input-safebox-button {
+	display: none;
+}
+
+// chrome input 适配
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	box-shadow: 0 0 0px 1000px white inset !important;
+}
