@@ -1,14 +1,16 @@
 <template>
     <el-row class="home">
         <el-col class="home-lamp"
-                :span="18">
+                :span="18"
+                :md="16">
             <div class="lamp"
                  :class="{ 'lamp-active': lampSwitch}">
                 <div class="gonna-give-light"></div>
             </div>
         </el-col>
         <el-col class="home-operation"
-                :span="6">
+                :span="6"
+                :md="8">
             <el-form :model="lampData"
                      :rules="rules"
                      label-position="left"
@@ -90,16 +92,20 @@ export default {
 	methods: {
 		// 开关
 		setSwitch() {
-			this.lampSwitch
-				? (this.lampSwitch = false)
-				: (this.lampSwitch = true);
-			if (this.client.connected) {
-				this.publish({
-					reported: {
-						switch: this.lampSwitch,
-					},
-				});
+			this.lampSwitch ? this.switchValue(false) : this.switchValue(true);
+		},
+
+		switchValue(value) {
+			this.lampSwitch = value;
+			console.log(value);
+			if (!this.client.connected) {
+				return;
 			}
+			this.publish({
+				reported: {
+					switch: this.lampSwitch,
+				},
+			});
 		},
 
 		// 连接
@@ -119,7 +125,6 @@ export default {
 
 		// 断开链接
 		disconnect() {
-			// this.$refs[formName].resetFields();
 			if (!this.client) {
 				console.log('a');
 				return;
@@ -191,8 +196,9 @@ export default {
 			console.log(JSON.parse(message.toString()));
 			const data = JSON.parse(message.toString());
 			if (data.desired) {
-				this.lampSwitch = data.desired.switch;
+				this.switchValue(data.desired.switch);
 			}
+			console.log(this.lampSwitch);
 		},
 
 		// 错误回调
@@ -206,6 +212,13 @@ export default {
 				qos: 1,
 				retain: true,
 			});
+		},
+
+		// 断开连接
+		disConnect() {
+			if (this.client.connected) {
+				this.client.end();
+			}
 		},
 
 		getlampData() {
@@ -226,9 +239,7 @@ export default {
 	},
 
 	beforeDestroy() {
-		if (this.client.connected) {
-			this.client.end();
-		}
+		this.disConnect();
 	},
 };
 </script>
@@ -279,7 +290,7 @@ export default {
 		linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
 	background-repeat: no-repeat;
 	background-size: 0.15rem 8rem, 0.4rem 0.8rem, 0.7rem 2rem;
-	background-position: 50% 0, 0.19rem 8rem, 0 8.8rem;
+	background-position: 50% 0, 0.15rem 8rem, 0 8.8rem;
 }
 
 .lamp::before,

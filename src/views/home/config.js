@@ -15,5 +15,5 @@ export const RULES = {
 	],
 };
 
-export const HOSTNAME = 'ws://10.10.122.212:8000';
+export const HOSTNAME = 'ws://10.10.72.4:8000';
 export const PORT = 8000;
