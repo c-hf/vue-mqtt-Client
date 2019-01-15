@@ -61,6 +61,7 @@ export default {
 			client: {},
 			lampData: {},
 			lampSwitch: false,
+			lampLuminance: 0,
 			disabled: false,
 			rules: RULES,
 			hostname: HOSTNAME,
@@ -95,16 +96,25 @@ export default {
 			this.lampSwitch ? this.switchValue(false) : this.switchValue(true);
 		},
 
+		// 开关设置
 		switchValue(value) {
 			this.lampSwitch = value;
-			console.log(value);
+			this.publishFn({ switch: this.lampSwitch });
+		},
+
+		// 亮度设置
+		luminanceValue(value) {
+			this.lampLuminance = value;
+			this.publishFn({ luminance: this.lampLuminance });
+		},
+
+		// 发送封装
+		publishFn(data) {
 			if (!this.client.connected) {
 				return;
 			}
 			this.publish({
-				reported: {
-					switch: this.lampSwitch,
-				},
+				reported: data,
 			});
 		},
 
@@ -126,7 +136,6 @@ export default {
 		// 断开链接
 		disconnect() {
 			if (!this.client) {
-				console.log('a');
 				return;
 			}
 			if (this.client.connected) {
@@ -192,13 +201,13 @@ export default {
 
 		// 接收消息回调
 		onMessage(topic, message) {
-			// console.log('topic: ', topic);
-			console.log(JSON.parse(message.toString()));
 			const data = JSON.parse(message.toString());
-			if (data.desired) {
+			const keys = Object.keys(data.desired);
+			if (keys.includes('switch')) {
 				this.switchValue(data.desired.switch);
+			} else if (keys.includes('luminance')) {
+				this.luminanceValue(data.desired.luminance);
 			}
-			console.log(this.lampSwitch);
 		},
 
 		// 错误回调
@@ -221,6 +230,7 @@ export default {
 			}
 		},
 
+		// 获取本地信息
 		getlampData() {
 			const data = storage.get('lampData');
 			if (data) {
@@ -246,6 +256,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/assets/scss/mixins';
+
 .home {
 	width: 100%;
 	height: 100%;
