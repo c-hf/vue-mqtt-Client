@@ -61,7 +61,7 @@ export default {
 			client: {},
 			lampData: {},
 			lampSwitch: false,
-			lampLuminance: 0,
+			lampLuminance: 100,
 			disabled: false,
 			rules: RULES,
 			hostname: HOSTNAME,
@@ -79,6 +79,7 @@ export default {
 				return 'device/status';
 			}
 		},
+
 		subTopic() {
 			if (this.lampData.deviceId && this.lampData.groupId) {
 				return `device/desired/${this.lampData.groupId}/${
@@ -87,6 +88,29 @@ export default {
 			} else {
 				return 'device/desired';
 			}
+		},
+
+		shadow() {
+			if (!this.switch || this.lampLuminance === 0) {
+				return '';
+			}
+			return `0px 2px 5px rgba(255,253,220, ${0.6 *
+				this.lampLuminance}) inset,
+            0px 2px 10px rgba(255,253,220, ${0.6 * this.lampLuminance}),
+            0px 5px 40px 10px rgba(255,253,220, ${0.6 * this.lampLuminance}),
+            0px 8px 80px ${22.2 * this.lampLuminance +
+				17.8}px rgba(255,253,220, ${0.4 * this.lampLuminance}),
+            0px 8px 120px ${44.4 * this.lampLuminance +
+				35.6}px rgba(255,253,220, ${0.2 * this.lampLuminance})`;
+		},
+
+		background() {
+			if (!this.switch || this.lampLuminance === 0) {
+				return '';
+			}
+			return `radial-gradient(
+                rgba(255,254,255, ${0.6 * this.lampLuminance + 0.4}) 10%,
+                rgba(255,253,220, ${0.6 * this.lampLuminance + 0.4}) 100%)`;
 		},
 	},
 
