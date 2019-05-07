@@ -8,11 +8,7 @@
 		"lint": "vue-cli-service lint"
 	},
 	"dependencies": {
-		"element-ui": "^2.4.11",
-		"mqtt": "^2.18.8",
-		"vue": "^2.5.21",
-		"vue-router": "^3.0.1",
-		"vuex": "^3.0.1"
+		"mqtt": "^2.18.8"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-babel": "^3.3.0",

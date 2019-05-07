@@ -15,5 +15,6 @@ export const RULES = {
 	],
 };
 
-export const HOSTNAME = 'ws://10.10.72.4:8000';
+export const HOSTNAME = 'ws://118.24.169.3/mqtt';
+// export const HOSTNAME = 'ws://localhost:8000/mqtt';
 export const PORT = 8000;
